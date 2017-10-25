@@ -1,0 +1,9 @@
+---
+applications:
+- name: charGEit
+  random-route: false
+  memory: 512M
+  env:
+    DOTNET_CLI_TELEMETRY_OPTOUT: 1
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: false
+    CACHE_NUGET_PACKAGES: false

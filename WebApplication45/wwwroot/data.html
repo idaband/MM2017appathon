@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Load a basic WebMap - 4.5</title>
+
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.5/esri/css/main.css">
+
+    <script src="https://js.arcgis.com/4.5/"></script>
+
+    <script>
+    require([
+      "esri/views/MapView",
+      "esri/WebMap",
+      "dojo/domReady!"
+    ], function(
+      MapView, WebMap
+    ) {
+
+      /************************************************************
+       * Creates a new WebMap instance. A WebMap must reference
+       * a PortalItem ID that represents a WebMap saved to
+       * arcgis.com or an on-premise portal.
+       *
+       * To load a WebMap from an on-premise portal, set the portal
+       * url with esriConfig.portalUrl.
+       ************************************************************/
+      var webmap = new WebMap({
+        portalItem: { // autocasts as new PortalItem()
+          id: "3a8793df2a174d59bfe1677c08336e7d"
+        }
+      });
+
+      /************************************************************
+       * Set the WebMap instance to the map property in a MapView.
+       ************************************************************/
+      var view = new MapView({
+        map: webmap,
+        container: "viewDiv"
+        });
+
+        //view.on("click", function (event) {
+
+        //    console.log("TEST");
+
+        //    var lat = event.mapPoint.latitude.toFixed(6);
+        //    var lon = event.mapPoint.longitude.toFixed(6);
+        //    view.hitTest(event.screenPoint).then(function (response) {
+        //        view.popup.open({attributes
+        //            title: "Map click",
+        //            location: event.mapPoint,
+        //            content: "Lat: " + lat + " | Lon: " + lon
+        //        });
+        //        graphics = response.results;
+        //        if (graphics.length > 0) {
+        //            var graphic = graphics[0];
+        //            view.popup.content += "<br>Value: " + graphic.graphic.attributes['Value'];
+        //        }
+        //    });
+        //});
+
+        view.on("click", eventHandler);
+
+        function eventHandler(event) {
+            // the hitTest() checks to see if any graphics in the view
+            // intersect the given screen x, y coordinates
+            view.hitTest(event)
+                .then(getGraphics);
+        }
+
+
+        function getGraphics(response) {
+            // the topmost graphic from the click location
+            // and display select attribute values from the
+            // graphic to the user
+            var graphic = response.results[0].graphic;
+            var attributes = graphic.attributes;
+            var category = attributes.CAT;
+            var wind = attributes.WIND_KTS;
+            var name = attributes.NAME;
+
+            document.getElementById("info").style.visibility = "visible";
+            document.getElementById("name").innerHTML = name;
+            document.getElementById("category").innerHTML = "Category " +
+                category;
+            document.getElementById("wind").innerHTML = wind + " kts";
+
+            // symbolize all line segments with the given
+            // storm name with the same symbol
+            var renderer = {
+                type: "unique-value", // autocasts as new UniqueValueRenderer()
+                field: "NAME",
+                defaultSymbol: layer.renderer.symbol || layer.renderer.defaultSymbol,
+                uniqueValueInfos: [{
+                    value: name,
+                    symbol: {
+                        type: "simple-line", // autocasts as new SimpleLineSymbol()
+                        color: "orange",
+                        width: 5,
+                        cap: "round"
+                    }
+                }]
+            };
+            layer.renderer = renderer;
+        }
+        
+    });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+</body>
+
+</html>

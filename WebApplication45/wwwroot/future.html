@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>charGEit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="The home page of my website" />
+    <link rel="stylesheet" href="/css/site.css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.5/esri/css/main.css">
+
+    <script src="https://js.arcgis.com/4.5/"></script>
+    <style>
+        html {
+            background-color: #63666A;
+            /*color: #005EB8;*/
+        }
+
+        html, body, .wrapper, .container, #left, #map,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #left {
+            float: left;
+            height: 1000px;
+            width: 800px;
+            /*background-color: red;*/
+        }
+
+        #right {
+            padding-left: 25px;
+            float: right;
+            width: 125px;
+        }
+
+        #footer {
+            clear: both;
+        }
+    </style>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#dostuff").click(function () {
+                //alert("Text: ");
+                //$.each(data, function (i, item) {
+                //    $('#demand').append('<tr><td>' + data[i].netcapcity + '</td>');
+                // //   alert(data[i].netcapcity)
+                //});
+                //send request...
+                // bob();
+                //get results... pupulate
+                $("#stuff").text("Drive to zone 40, 50, 60 for highest demand");
+            });
+
+            $("#btn2").click(function () {
+                alert("HTML: " + $("#test").html());
+            });
+
+
+            var data = [
+                { "netcapcity": 4.5 },
+                { "netcapcity": 3.1 },
+                { "netcapcity": -100 }
+            ];
+
+            //$.each(data, function (i, item) {
+            //    alert(data[i].PageName);
+            //});
+
+        });
+    </script>
+
+    <script>
+
+        require([
+            "esri/views/MapView",
+            "esri/WebMap",
+            "dojo/domReady!"
+        ], function (
+            MapView, WebMap
+        ) {
+
+                /************************************************************
+                 * Creates a new WebMap instance. A WebMap must reference
+                 * a PortalItem ID that represents a WebMap saved to
+                 * arcgis.com or an on-premise portal.
+                 *
+                 * To load a WebMap from an on-premise portal, set the portal
+                 * url with esriConfig.portalUrl.
+                 ************************************************************/
+                var webmap = new WebMap({
+                    portalItem: { // autocasts as new PortalItem()
+                        id: "26d94f7f889b45108cdf1a3c1dd28438"
+                    }
+                });
+
+                /************************************************************
+                 * Set the WebMap instance to the map property in a MapView.
+                 ************************************************************/
+                var view = new MapView({
+                    map: webmap,
+                    container: "viewDiv"
+                });
+            });
+
+    </script>
+
+</head>
+<body>
+
+    <div class="wrapper">
+        <header role="banner">
+            <span color="#9d9d9d" id="power">Powered by <img style="vertical-align:middle" height="40px" src="Predix_logo_color.png" /></span>
+            <nav class="container">
+                <ul>
+                    <li><a id="title" href="/">charGEit</a></li>
+                    <li><a href="/">Home</a></li>
+                    <!--<li><a href="/about.html">About</a></li>
+            <li><a href="/demand.html">About</a></li>-->
+                    <li><a href="/current.html">Current</a></li>
+                    <li><a href="/future.html">Future</a></li>
+                </ul>
+            </nav>
+        </header>
+
+
+        <main class="container">
+            <div id="left">
+                
+                <div id="map"><div id="viewDiv"></div></div>
+            </div>
+            <div id="right">
+                <h1 class="logo">2 Hours into the Future Predicted</h1>
+                <div id="moveright">
+                    <p><!--this is location of right--> </p>
+                    <div id="butonLocation">
+                        <button id="dostuff">Where shoud I Charge?</button>
+                    </div>
+                    <p id="stuff"></p>
+                    <!--<table id="demand">
+                        <tr><th>ObjectId</th><th>Demand</th><th>Capacity</th></tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>-->
+                </div>
+
+                <!--<p>This is the index.cshtml</p>-->
+
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div id="footer" class="container">
+            <span>&copy; 2017 - charGEit</span>
+        </div>
+    </footer>
+
+    <script src="/js/site.js"></script>
+</body>
+
+
+</html>
